@@ -11,19 +11,19 @@ export const pokemonReducer = (state = pokemonInitialState, action) => {
  const actions = {
   [GET_POKEMONS]: () => ({
    ...state,
-   getPokemonsResponse: getPokemonsInitialState.getPokemonsResponse,
-   getPokemonsError: getPokemonsInitialState.getPokemonsError,
    getPokemonsParam: payload,
    action: type
   }),
   [GET_POKEMONS_SUCCESS]: () => ({
    ...state,
    getPokemonsResponse: payload,
+   getPokemonsError: getPokemonsInitialState.getPokemonsError,
    action: type
   }),
   [GET_POKEMONS_ERROR]: () => ({
    ...state,
    getPokemonsError: payload,
+   getPokemonsResponse: getPokemonsInitialState.getPokemonsResponse,
    action: type
   }),
   [GET_POKEMONS_CLEAR]: () => ({
@@ -33,5 +33,5 @@ export const pokemonReducer = (state = pokemonInitialState, action) => {
   }),
   DEFAULT: () => state,
  };
- return (actions[type] || actions.DEFAULT());
+ return (actions[type] || actions.DEFAULT)();
 }

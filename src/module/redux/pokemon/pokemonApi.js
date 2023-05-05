@@ -5,5 +5,6 @@ const pokemonApi = {
 }
 
 export const getPokemonsApi = (payload) => {
- return api.get(pokemonApi.getPokemons);
+ const {offset, limit} = payload
+ return api.get(`${pokemonApi.getPokemons}?offset=${offset}&limit=${limit}`);
 }

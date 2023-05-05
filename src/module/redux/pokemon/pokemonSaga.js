@@ -13,7 +13,7 @@ function* getPokemons(params) {
 }
 
 const pokemonSaga = [
- takeLatest(GET_POKEMONS, getPokemons())
+ takeLatest(GET_POKEMONS, getPokemons)
 ]
 
 export default pokemonSaga
