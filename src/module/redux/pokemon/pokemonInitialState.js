@@ -5,3 +5,11 @@ export const getPokemonsInitialState = {
  },
  getPokemonsParam: {}
 }
+
+export const getPokemonDetailInitialState = {
+ getPokemonDetailResponse: {},
+ getPokemonDetailError: {
+  message: {}
+ },
+ getPokemonDetailParam: {}
+}

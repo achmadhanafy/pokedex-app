@@ -9,3 +9,8 @@ export const api = axios.create({
  },
  baseURL: BASE_URL
 })
+
+export const PAGES = {
+ Home:'/home',
+ PokemonDetail:'/pokemon-detail'
+}

@@ -1,7 +1,12 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { getPokemonsApi } from "./pokemonApi";
-import { getPokemonsError, getPokemonsSucess } from "./pokemonAction";
-import { GET_POKEMONS } from "./pokemonConstant";
+import { getPokemonDetailApi, getPokemonsApi } from "./pokemonApi";
+import {
+  getPokemonDetailError,
+  getPokemonDetailSucess,
+  getPokemonsError,
+  getPokemonsSucess,
+} from "./pokemonAction";
+import * as CONST from "./pokemonConstant";
 
 function* getPokemons(params) {
   try {
@@ -12,8 +17,18 @@ function* getPokemons(params) {
   }
 }
 
-const pokemonSaga = [
- takeLatest(GET_POKEMONS, getPokemons)
-]
+function* getPokemonDetail(params) {
+  try {
+    const response = yield call(getPokemonDetailApi, params.payload);
+    yield put(getPokemonDetailSucess(response?.data));
+  } catch (error) {
+    yield put(getPokemonDetailError(error?.response?.data));
+  }
+}
 
-export default pokemonSaga
+const pokemonSaga = [
+  takeLatest(CONST.GET_POKEMONS, getPokemons),
+  takeLatest(CONST.GET_POKEMONS_DETAIL, getPokemonDetail),
+];
+
+export default pokemonSaga;

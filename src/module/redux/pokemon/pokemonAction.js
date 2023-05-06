@@ -1,18 +1,35 @@
-import { GET_POKEMONS, GET_POKEMONS_CLEAR, GET_POKEMONS_ERROR, GET_POKEMONS_SUCCESS } from "./pokemonConstant";
+import * as CONST from "./pokemonConstant";
 
 export const getPokemons = (payload) => ({
- type: GET_POKEMONS,
- payload
-})
+  type: CONST.GET_POKEMONS,
+  payload,
+});
 export const getPokemonsSucess = (payload) => ({
- type: GET_POKEMONS_SUCCESS,
- payload
-})
+  type: CONST.GET_POKEMONS_SUCCESS,
+  payload,
+});
 export const getPokemonsError = (payload) => ({
- type: GET_POKEMONS_ERROR,
- payload
-})
+  type: CONST.GET_POKEMONS_ERROR,
+  payload,
+});
 export const getPokemonsClear = (payload) => ({
- type: GET_POKEMONS_CLEAR,
- payload
-})
+  type: CONST.GET_POKEMONS_CLEAR,
+  payload,
+});
+
+export const getPokemonDetail = (payload) => ({
+ type: CONST.GET_POKEMON_DETAIL,
+ payload,
+});
+export const getPokemonDetailSucess = (payload) => ({
+ type: CONST.GET_POKEMON_DETAIL_SUCCESS,
+ payload,
+});
+export const getPokemonDetailError = (payload) => ({
+ type: CONST.GET_POKEMON_DETAIL_ERROR,
+ payload,
+});
+export const getPokemonDetailClear = (payload) => ({
+ type: CONST.GET_POKEMON_DETAIL_CLEAR,
+ payload,
+});

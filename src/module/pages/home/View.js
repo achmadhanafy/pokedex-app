@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Dropdown,
@@ -7,18 +7,67 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import Cardx from "../../../components/Cardx";
+import { useNavigate } from "react-router-dom";
+import { PAGES } from "../../util";
 
-function Home({ pokemon, getPokemons }) {
-  const [habitat, setHabitat] = useState(null);
+function Home({
+  pokemon,
+  getPokemons,
+  getHabitats,
+  habitat,
+  getHabitatDetail,
+}) {
+  const [filterHabitat, setFilterHabitat] = useState(null);
   const [search, setSearch] = useState("");
   const [pagination, setPagination] = useState({
     offset: 0,
     limit: 20,
   });
+  const [submitSearch, setSubmitSearch] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
-    getPokemons(pagination);
-  }, [pagination]);
+    getHabitats();
+  }, []);
+
+  useEffect(() => {
+    if (filterHabitat) {
+      getHabitatDetail({
+        name: filterHabitat,
+      });
+    }
+  }, [filterHabitat]);
+
+  useEffect(() => {
+    if (!search?.length) {
+      getPokemons(pagination);
+      setSubmitSearch(null);
+    }
+  }, [pagination, search]);
+
+  const pokemonData = useMemo(() => {
+    const allPokemons = pokemon.getPokemonsResponse?.results;
+    const pokemonByHabitat = habitat.getHabitatDetailResponse?.pokemon_species;
+    const pokemonBySearch = () =>
+      pokemon.getPokemonsResponse?.results?.filter((element) => {
+        return element?.name?.includes(submitSearch);
+      });
+    if (submitSearch) {
+      return pokemonBySearch();
+    }
+
+    if (pokemonByHabitat) {
+      return pokemonByHabitat;
+    }
+
+    if (allPokemons) {
+      return allPokemons;
+    }
+  }, [
+    pokemon.getPokemonsResponse?.results,
+    habitat.getHabitatDetailResponse?.pokemon_species,
+    submitSearch,
+  ]);
 
   return (
     <div className="container">
@@ -33,17 +82,35 @@ function Home({ pokemon, getPokemons }) {
               placeholder="Pokemon Name"
               aria-label="Pokemon username"
             />
-            <Button variant="outline-secondary" id="button-addon2">
+            <Button
+              onClick={() => {
+                setSubmitSearch(search);
+                if (!submitSearch) {
+                  getPokemons({
+                    limit: 1500,
+                  });
+                }
+              }}
+              variant="outline-secondary"
+              id="button-addon2"
+            >
               Search
             </Button>
           </InputGroup>
-          <DropdownButton title="Habitat">
-            <Dropdown.Item eventKey={1}>Action</Dropdown.Item>
+          <DropdownButton
+            onSelect={(e) => setFilterHabitat(e)}
+            title={filterHabitat ? filterHabitat : "Habitat"}
+          >
+            {habitat.getHabitatsResponse?.results?.map((element) => (
+              <Dropdown.Item eventKey={element?.name}>
+                {element?.name}
+              </Dropdown.Item>
+            ))}
           </DropdownButton>
         </div>
       </div>
       <div className="row p-5">
-        {pokemon.getPokemonsResponse?.results?.map((element) => (
+        {pokemonData?.map((element) => (
           <div className="col col-lg-3 pb-3">
             <Cardx
               img={`https://img.pokemondb.net/artwork/large/${element?.name}.jpg`}
@@ -53,6 +120,7 @@ function Home({ pokemon, getPokemons }) {
                 className="mt-3"
                 variant="outline-primary"
                 id="button-addon2"
+                onClick={()=> navigate(`${PAGES.PokemonDetail}/${element?.name}`)}
               >
                 Detail
               </Button>
