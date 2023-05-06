@@ -33,24 +33,24 @@ export const pokemonReducer = (state = pokemonInitialState, action) => {
       action: type,
     }),
 
-    [CONST.GET_POKEMONS_DETAIL]: () => ({
+    [CONST.GET_POKEMON_DETAIL]: () => ({
      ...state,
      getPokemonDetailParam: payload,
      action: type,
    }),
-   [CONST.GET_POKEMONS_DETAIL_SUCCESS]: () => ({
+   [CONST.GET_POKEMON_DETAIL_SUCCESS]: () => ({
      ...state,
      getPokemonDetailResponse: payload,
      getPokemonDetailError: getPokemonDetailInitialState.getPokemonDetailError,
      action: type,
    }),
-   [CONST.GET_POKEMONS_DETAIL_ERROR]: () => ({
+   [CONST.GET_POKEMON_DETAIL_ERROR]: () => ({
      ...state,
      getPokemonDetailError: payload,
      getPokemonDetailResponse: getPokemonDetailInitialState.getPokemonDetailResponse,
      action: type,
    }),
-   [CONST.GET_POKEMONS_DETAIL_CLEAR]: () => ({
+   [CONST.GET_POKEMON_DETAIL_CLEAR]: () => ({
      ...state,
      ...getPokemonDetailInitialState,
      action: type,

@@ -17,6 +17,7 @@ function Home({
   habitat,
   getHabitatDetail,
 }) {
+  // HOOKS
   const [filterHabitat, setFilterHabitat] = useState(null);
   const [search, setSearch] = useState("");
   const [pagination, setPagination] = useState({
@@ -24,12 +25,14 @@ function Home({
     limit: 20,
   });
   const [submitSearch, setSubmitSearch] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
+  // Fetch Habitats
   useEffect(() => {
     getHabitats();
   }, []);
 
+  // Fetch Pokemon By Habitat
   useEffect(() => {
     if (filterHabitat) {
       getHabitatDetail({
@@ -38,6 +41,7 @@ function Home({
     }
   }, [filterHabitat]);
 
+  // Handler Search Bar
   useEffect(() => {
     if (!search?.length) {
       getPokemons(pagination);
@@ -45,18 +49,19 @@ function Home({
     }
   }, [pagination, search]);
 
+  // Pokemon Data Memo
   const pokemonData = useMemo(() => {
     const allPokemons = pokemon.getPokemonsResponse?.results;
     const pokemonByHabitat = habitat.getHabitatDetailResponse?.pokemon_species;
     const pokemonBySearch = () =>
       pokemon.getPokemonsResponse?.results?.filter((element) => {
-        return element?.name?.includes(submitSearch);
+        return element?.name?.includes(submitSearch?.toLowerCase());
       });
     if (submitSearch) {
       return pokemonBySearch();
     }
 
-    if (pokemonByHabitat) {
+    if (pokemonByHabitat && filterHabitat) {
       return pokemonByHabitat;
     }
 
@@ -67,48 +72,53 @@ function Home({
     pokemon.getPokemonsResponse?.results,
     habitat.getHabitatDetailResponse?.pokemon_species,
     submitSearch,
+    filterHabitat
   ]);
-
-  return (
-    <div className="container">
-      <div className="">
-        <div className="mt-5 fs-1 fw-bold bg-blue text-primary">
-          Pokedex App
-        </div>{" "}
-        <div className="d-flex mt-5 justify-content-between">
-          <InputGroup className="mb-3" style={{ maxWidth: 500 }}>
-            <Form.Control
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Pokemon Name"
-              aria-label="Pokemon username"
-            />
-            <Button
-              onClick={() => {
-                setSubmitSearch(search);
-                if (!submitSearch) {
-                  getPokemons({
-                    limit: 1500,
-                  });
-                }
-              }}
-              variant="outline-secondary"
-              id="button-addon2"
-            >
-              Search
-            </Button>
-          </InputGroup>
-          <DropdownButton
-            onSelect={(e) => setFilterHabitat(e)}
-            title={filterHabitat ? filterHabitat : "Habitat"}
+  console.log('test')
+  const filter = () => {
+    return (
+      <div className="d-flex mt-5 justify-content-between">
+        <InputGroup className="mb-3" style={{ maxWidth: 500 }}>
+          <Form.Control
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Pokemon Name"
+            aria-label="Pokemon username"
+          />
+          <Button
+            onClick={() => {
+              setSubmitSearch(search);
+              if (!submitSearch) {
+                getPokemons({
+                  limit: 1500,
+                });
+              }
+            }}
+            variant="outline-secondary"
+            id="button-addon2"
           >
-            {habitat.getHabitatsResponse?.results?.map((element) => (
-              <Dropdown.Item eventKey={element?.name}>
-                {element?.name}
-              </Dropdown.Item>
-            ))}
-          </DropdownButton>
-        </div>
+            Search
+          </Button>
+        </InputGroup>
+        <DropdownButton
+          onSelect={(e) => setFilterHabitat(e)}
+          title={filterHabitat ? filterHabitat : "Habitat"}
+        >
+           <Dropdown.Item eventKey={null}>
+              all
+            </Dropdown.Item>
+          {habitat.getHabitatsResponse?.results?.map((element) => (
+            <Dropdown.Item eventKey={element?.name}>
+              {element?.name}
+            </Dropdown.Item>
+          ))}
+          
+        </DropdownButton>
       </div>
+    );
+  };
+
+  const main = () => {
+    return (
       <div className="row p-5">
         {pokemonData?.map((element) => (
           <div className="col col-lg-3 pb-3">
@@ -120,7 +130,9 @@ function Home({
                 className="mt-3"
                 variant="outline-primary"
                 id="button-addon2"
-                onClick={()=> navigate(`${PAGES.PokemonDetail}/${element?.name}`)}
+                onClick={() =>
+                  navigate(`${PAGES.PokemonDetail}/${element?.name}`)
+                }
               >
                 Detail
               </Button>
@@ -128,6 +140,18 @@ function Home({
           </div>
         ))}
       </div>
+    );
+  };
+
+  return (
+    <div className="container">
+      <div className="">
+        <div className="mt-5 fs-1 fw-bold bg-blue text-primary">
+          Pokedex App
+        </div>{" "}
+        {filter()}
+      </div>
+      {main()}
       <Button
         onClick={() =>
           setPagination({

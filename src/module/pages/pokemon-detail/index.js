@@ -1,17 +1,13 @@
 import { connect } from "react-redux"
 import View from './View'
-import { getPokemons } from "../../redux/pokemon/pokemonAction"
-import { getHabitatDetail, getHabitats } from "../../redux/habitat/habitatAction"
+import { getPokemonDetail } from "../../redux/pokemon/pokemonAction"
 
 const mapStateToProps = (state) => ({
  pokemon: state.pokemon,
- habitat: state.habitat
 })
 
 const mapDispatchToProps = {
- getPokemons: (payload) => getPokemons(payload),
- getHabitats: (payload) => getHabitats(payload),
- getHabitatDetail: (payload) => getHabitatDetail(payload)
+ getPokemonDetail: (payload) => getPokemonDetail(payload),
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(View)
