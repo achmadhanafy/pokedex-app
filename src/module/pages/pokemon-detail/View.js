@@ -14,7 +14,7 @@ function PokemonDetail({ getPokemonDetail, pokemon }) {
 
   const header = () => {
     return (
-      <div className="fw-bold fs-5 text-secondary">
+      <div className="fw-bold fs-5 mb-3 text-secondary">
         {name?.toUpperCase()}
         <div className="fs-6 fw-normal text-start mt-3">
           <li>Height: {pokemonDetail?.height}</li>
@@ -34,6 +34,7 @@ function PokemonDetail({ getPokemonDetail, pokemon }) {
             {pokemonDetail?.stats?.map((element) => (
               <div className="text-start">
                 {element?.stat?.name?.replace("-", " ")} : {element?.base_stat}
+                <hr />
               </div>
             ))}
           </div>
@@ -42,30 +43,33 @@ function PokemonDetail({ getPokemonDetail, pokemon }) {
           <div className="bg-info text-white rounded fw-semibold">
             Abilities
           </div>
-          {pokemonDetail?.abilities?.map((element) => (
-            <div>
-              <li>{element?.ability?.name}</li>
+         <div className="mt-3">
+         {pokemonDetail?.abilities?.map((element) => (
+            <div className="text-success fw-semibold">
+              {element?.ability?.name}
+              <hr />
             </div>
           ))}
+         </div>
         </div>
         <div className="mt-3">
           <div className="bg-info text-white fw-semibold rounded ">Moves</div>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex flex-wrap p-3">
             {pokemonDetail?.moves?.map((element) => (
-              <li className="" style={{ marginRight: 10 }}>
+              <div className="bg-success m-2 p-1 rounded text-white">
                 {element?.move?.name?.replace("-", " ")}
-              </li>
+              </div>
             ))}
           </div>
         </div>
       </div>
-    ); 
+    );
   };
   return (
     <div className="container">
       <div className="fs-1 fw-bold text-primary my-5">Pokemon Detail</div>
       <div className="row justify-content-center mt-5">
-        <div className="border border-1 col-lg-5 p-3">
+        <div className="border border-1 col-lg-5 p-4">
           {header()}
           <img
             width={300}
